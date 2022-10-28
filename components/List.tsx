@@ -109,7 +109,7 @@ function List({ name, id, cards }: IList) {
 						<textarea
 							ref={cardRef}
 							name="card"
-							className="w-full h-16 rounded-sm p-2"
+							className="w-full h-16 rounded-sm p-2 resize-none"
 						></textarea>
 						<div className="flex space-x-2 py-1.5">
 							<button

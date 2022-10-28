@@ -36,7 +36,7 @@ const Home: NextPage = () => {
 		listNameRef.current.value = "";
 	}
 	return (
-		<div className="min-h-screen bg-gradient-to-r from-cyan-500 to-purple-500 relative">
+		<div className="min-h-screen min-w-fit bg-gradient-to-r from-cyan-500 to-purple-500 relative">
 			{overlayIsActive && (
 				<div
 					onClick={() => {
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main className="flex h-full items-start pt-10 pl-7 pb-5 space-x-2.5 ">
+			<main className="flex h-full items-start pt-10 pl-7 pb-5 space-x-2.5 pr-7">
 				{lists.map((list) => (
 					<List
 						name={list.name}

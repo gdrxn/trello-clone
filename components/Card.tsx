@@ -1,10 +1,14 @@
-import React, { useEffect, useRef, useState, RefObject } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ICard } from "../types";
 import EditIcon from "../icons/edit.svg";
+import DeleteIcon from "../icons/delete.svg";
+import OpenIcon from "../icons/open.svg";
 import { setOverlay, selectOverlay } from "../slices/overlaySlice";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { removeCard, updateCardText } from "../slices/listsSlices";
+import Label from "./Label";
+
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
@@ -23,6 +27,7 @@ function Card({ id, text, listId }: ICard) {
 
 	function deleteCard() {
 		dispatch(removeCard({ id, listId, text }));
+		dispatch(setOverlay(false));
 	}
 
 	function updateText() {
@@ -58,27 +63,29 @@ function Card({ id, text, listId }: ICard) {
 				className={
 					popUpIsActive
 						? "bg-neutral-50 rounded py-2 px-1 flex flex-col group relative break-all z-30"
-						: "bg-neutral-50 rounded py-2 px-1 flex group relative break-all"
+						: "bg-neutral-50 rounded py-2 px-1 flex flex-col group relative break-all"
 				}
 			>
 				{overlayIsActive && popUpIsActive && (
-					<div className="flex flex-col left-72 top-0 absolute z-30 rounded bg-opacity-95 space-y-1 break-normal">
-						<button className="py-1 px-2 text-gray-100 bg-gray-800 rounded">
-							Edit
+					<div className="flex flex-col left-72 top-0 absolute z-30 rounded bg-opacity-95 space-y-1  items-start">
+						<button className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap">
+							<OpenIcon className="w-4 h-4" />
+							<span>Open card</span>
 						</button>
 						<button
 							onClick={() => {
 								deleteCard();
 							}}
-							className="py-1 px-2 text-gray-100 bg-gray-800 rounded"
+							className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap"
 						>
-							Delete
-						</button>
-						<button className="py-1 px-2 text-gray-100 bg-gray-800 rounded">
-							Edit
+							<DeleteIcon className="w-4 h-4" />
+							<span>Delete card</span>
 						</button>
 					</div>
 				)}
+				<div className="p-1 flex flex-wrap">
+					<Label />
+				</div>
 				<p
 					ref={textEl}
 					onChange={(e) => {
