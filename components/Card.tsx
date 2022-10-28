@@ -8,6 +8,7 @@ import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { removeCard, updateCardText } from "../slices/listsSlices";
 import Label from "./Label";
+import { setCard } from "../slices/cardSlice";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -68,7 +69,12 @@ function Card({ id, text, listId }: ICard) {
 			>
 				{overlayIsActive && popUpIsActive && (
 					<div className="flex flex-col left-72 top-0 absolute z-30 rounded bg-opacity-95 space-y-1  items-start">
-						<button className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap">
+						<button
+							onClick={() => {
+								dispatch(setCard({ id, text, listId }));
+							}}
+							className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap"
+						>
 							<OpenIcon className="w-4 h-4" />
 							<span>Open card</span>
 						</button>

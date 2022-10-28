@@ -10,6 +10,7 @@ import {
 	REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import cardSlice from "./slices/cardSlice";
 import listsSlices from "./slices/listsSlices";
 import overlaySlice from "./slices/overlaySlice";
 
@@ -17,12 +18,13 @@ const persistConfig = {
 	key: "root",
 	version: 1,
 	storage,
-	blacklist: ["overlay"],
+	blacklist: ["overlay", "card"],
 };
 
 const rootReducer = combineReducers({
 	lists: listsSlices,
 	overlay: overlaySlice,
+	card: cardSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

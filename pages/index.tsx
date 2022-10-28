@@ -10,6 +10,7 @@ import { IList } from "../types";
 import type { RootState, AppDispatch } from "../store";
 import { v4 as uuidv4 } from "uuid";
 import { selectOverlay, setOverlay } from "../slices/overlaySlice";
+import { selectCard } from "../slices/cardSlice";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -17,6 +18,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 const Home: NextPage = () => {
 	const dispatch = useAppDispatch();
 	const lists = useAppSelector(selectLists);
+	const card = useAppSelector(selectCard);
 	const overlayIsActive = useAppSelector(selectOverlay);
 
 	const [isEditingListName, setIsEditingListName] = useState<boolean>(false);
@@ -37,6 +39,11 @@ const Home: NextPage = () => {
 	}
 	return (
 		<div className="min-h-screen min-w-fit bg-gradient-to-r from-cyan-500 to-purple-500 relative">
+			<Head>
+				<title>Trello</title>
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+
 			{overlayIsActive && (
 				<div
 					onClick={() => {
@@ -45,10 +52,15 @@ const Home: NextPage = () => {
 					className="h-full w-full bg-black z-10 absolute opacity-40"
 				></div>
 			)}
-			<Head>
-				<title>Trello</title>
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
+
+			{card && (
+				<div className="absolute flex flex-col items-center  bg-white w-[65rem] h-[45rem] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-40">
+					<h1 className="mt-3 text-2xl">Edit card</h1>
+					<textarea className="mt-5 w-11/12 h-1/2 rounded-sm border border-gray-200 resize-none">
+						{card.text}
+					</textarea>
+				</div>
+			)}
 
 			<main className="flex h-full items-start pt-10 pl-7 pb-5 space-x-2.5 pr-7">
 				{lists.map((list) => (
