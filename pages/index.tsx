@@ -1,86 +1,106 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type { NextPage } from "next";
+import Head from "next/head";
+import { useState, useRef } from "react";
+import List from "../components/List";
+import CloseIcon from "../icons/close.svg";
+import PlusIcon from "../icons/plus.svg";
+import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
+import { selectLists, addList } from "../slices/listsSlices";
+import { IList } from "../types";
+import type { RootState, AppDispatch } from "../store";
+import { v4 as uuidv4 } from "uuid";
+import { selectOverlay, setOverlay } from "../slices/overlaySlice";
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const Home: NextPage = () => {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+	const dispatch = useAppDispatch();
+	const lists = useAppSelector(selectLists);
+	const overlayIsActive = useAppSelector(selectOverlay);
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+	const [isEditingListName, setIsEditingListName] = useState<boolean>(false);
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
+	const listNameRef = useRef<HTMLInputElement>(null);
 
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
-            </p>
-          </a>
+	function saveList() {
+		if (!listNameRef.current || !listNameRef.current.value) return;
 
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
+		const list: IList = {
+			name: listNameRef.current.value,
+			id: uuidv4(),
+			cards: [],
+		};
+		dispatch(addList(list));
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
+		listNameRef.current.value = "";
+	}
+	return (
+		<div className="min-h-screen bg-gradient-to-r from-cyan-500 to-purple-500 relative">
+			{overlayIsActive && (
+				<div
+					onClick={() => {
+						dispatch(setOverlay(false));
+					}}
+					className="h-full w-full bg-black z-10 absolute opacity-40"
+				></div>
+			)}
+			<Head>
+				<title>Trello</title>
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+			<main className="flex h-full items-start pt-10 pl-7 pb-5 space-x-2.5 ">
+				{lists.map((list) => (
+					<List
+						name={list.name}
+						id={list.id}
+						cards={list.cards}
+						key={list.id}
+					/>
+				))}
 
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
-    </div>
-  )
-}
+				{!isEditingListName ? (
+					<button
+						className="flex items-center space-x-2 h-10 w-72 shrink-0 pl-3 bg-gray-100 rounded-sm bg-opacity-20 shadow-lg text-white"
+						onClick={() => {
+							setIsEditingListName(true);
+						}}
+					>
+						<PlusIcon className="w-6 h-6" />
+						<span> Add another list</span>
+					</button>
+				) : (
+					<div className="bg-gray-200 h-fit p-1.5 rounded space-y-2 bg-opacity-90 w-72 shrink-0">
+						<input
+							type="text"
+							className="py-1 rounded-sm w-full px-2 focus:outline-blue-400"
+							ref={listNameRef}
+						/>
 
-export default Home
+						<div className="flex space-x-2 items-center shrink-0">
+							<button
+								className="bg-blue-500 py-1.5 px-2 rounded text-white text-sm font-md hover:bg-blue-600"
+								onClick={() => {
+									saveList();
+								}}
+							>
+								Add List
+							</button>
+							<button
+								className="text-gray-500 hover:text-gray-600"
+								onClick={() => {
+									setIsEditingListName(false);
+								}}
+							>
+								<CloseIcon className="w-6 h-6" />
+							</button>
+						</div>
+					</div>
+				)}
+			</main>
+		</div>
+	);
+};
+
+export default Home;

@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "icons/close-icon.svg", "icons/plus-icon.svg", "icons/option-icon.svg"],
   "exclude": ["node_modules"]
 }
