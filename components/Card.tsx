@@ -16,6 +16,11 @@ function Card({ id, text, listId }: ICard) {
 
 	const dispatch = useAppDispatch();
 
+	function enablePopUp() {
+		setpopUpIsActive(true);
+		dispatch(setOverlay(true));
+	}
+
 	function deleteCard() {
 		dispatch(removeCard({ id, listId, text }));
 	}
@@ -27,6 +32,7 @@ function Card({ id, text, listId }: ICard) {
 			textEl.current.textContent === ""
 		)
 			return;
+
 		const updatedCard: ICard = {
 			id,
 			listId,
@@ -89,8 +95,7 @@ function Card({ id, text, listId }: ICard) {
 					<button
 						className="absolute right-1 top-1 w-7 h-7 p-1.5 hover:bg-gray-200 rounded hidden group-hover:block"
 						onClick={() => {
-							setpopUpIsActive(true);
-							dispatch(setOverlay(true));
+							enablePopUp();
 						}}
 					>
 						<EditIcon />
