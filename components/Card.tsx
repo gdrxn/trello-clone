@@ -13,7 +13,7 @@ import { setCard } from "../slices/cardSlice";
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-function Card({ id, text, listId }: ICard) {
+function Card(props: ICard) {
 	const overlayIsActive = useAppSelector(selectOverlay);
 	const [popUpIsActive, setpopUpIsActive] = useState(false);
 
@@ -27,7 +27,7 @@ function Card({ id, text, listId }: ICard) {
 	}
 
 	function deleteCard() {
-		dispatch(removeCard({ id, listId, text }));
+		dispatch(removeCard(props));
 		dispatch(setOverlay(false));
 	}
 
@@ -40,9 +40,10 @@ function Card({ id, text, listId }: ICard) {
 			return;
 
 		const updatedCard: ICard = {
-			id,
-			listId,
+			id: props.id,
+			listId: props.listId,
 			text: textEl.current.textContent,
+			labels: props.labels,
 		};
 
 		dispatch(updateCardText(updatedCard));
@@ -54,7 +55,7 @@ function Card({ id, text, listId }: ICard) {
 			setpopUpIsActive(false);
 		}
 		if (textEl.current) {
-			textEl.current.textContent = text;
+			textEl.current.textContent = props.text;
 		}
 	}, [overlayIsActive]);
 
@@ -71,7 +72,7 @@ function Card({ id, text, listId }: ICard) {
 					<div className="flex flex-col left-72 top-0 absolute z-30 rounded bg-opacity-95 space-y-1  items-start">
 						<button
 							onClick={() => {
-								dispatch(setCard({ id, text, listId }));
+								dispatch(setCard(props));
 							}}
 							className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap"
 						>
@@ -102,7 +103,7 @@ function Card({ id, text, listId }: ICard) {
 					className="w-full p-1"
 					contentEditable={popUpIsActive ? "true" : "false"}
 				>
-					{text}
+					{props.text}
 				</p>
 				{!popUpIsActive && (
 					<button

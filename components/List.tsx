@@ -11,11 +11,11 @@ import { addCard, removeList, changeListName } from "../slices/listsSlices";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
-function List({ name, id, cards }: IList) {
+function List(props: IList) {
 	const dispatch = useAppDispatch();
 	const [isEditingCardName, setIsEditingCardName] = useState(false);
 	const cardRef = useRef<HTMLTextAreaElement>(null);
-	const [listName, setListName] = useState(name);
+	const [listName, setListName] = useState(props.name);
 	const [listPopUpIsActive, setListPopUpIsActive] = useState(false);
 
 	function saveCard() {
@@ -23,8 +23,9 @@ function List({ name, id, cards }: IList) {
 
 		const card = {
 			text: cardRef.current.value,
-			listId: id,
+			listId: props.id,
 			id: uuidv4(),
+			labels: [],
 		};
 
 		dispatch(addCard(card));
@@ -33,14 +34,14 @@ function List({ name, id, cards }: IList) {
 	}
 
 	function deleteList() {
-		dispatch(removeList({ name, id, cards }));
+		dispatch(removeList(props));
 	}
 
 	function editListName(newName: string) {
 		if (newName.trim()) return;
 
 		setListName(newName);
-		dispatch(changeListName({ id: id, newName: newName }));
+		dispatch(changeListName({ id: props.id, newName: newName }));
 	}
 
 	return (
@@ -92,8 +93,14 @@ function List({ name, id, cards }: IList) {
 			</div>
 
 			<div className="space-y-2 pb-2">
-				{cards.map((card) => (
-					<Card text={card.text} listId={id} id={card.id} key={card.id} />
+				{props.cards.map((card) => (
+					<Card
+						text={card.text}
+						listId={props.id}
+						id={card.id}
+						labels={card.labels}
+						key={card.id}
+					/>
 				))}
 
 				{!isEditingCardName ? (
