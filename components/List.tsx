@@ -19,7 +19,7 @@ function List({ name, id, cards }: IList) {
 	const [listPopUpIsActive, setListPopUpIsActive] = useState(false);
 
 	function saveCard() {
-		if (!cardRef.current || !cardRef.current.value) return;
+		if (!cardRef.current || cardRef.current.value.trim() === "") return;
 
 		const card = {
 			text: cardRef.current.value,
@@ -37,6 +37,8 @@ function List({ name, id, cards }: IList) {
 	}
 
 	function editListName(newName: string) {
+		if (newName.trim()) return;
+
 		setListName(newName);
 		dispatch(changeListName({ id: id, newName: newName }));
 	}
@@ -46,7 +48,7 @@ function List({ name, id, cards }: IList) {
 			{listPopUpIsActive && (
 				<div className="flex flex-col bg-white left-64 w-64 top-10 absolute z-20 rounded bg-opacity-95">
 					<div className="flex items-center justify-center  mx-3 py-2 border-gray-200 border-b">
-						<span className="flex">List actions</span>
+						<span>List actions</span>
 						<CloseIcon
 							onClick={() => {
 								setListPopUpIsActive(false);

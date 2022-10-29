@@ -35,7 +35,7 @@ function Card({ id, text, listId }: ICard) {
 		if (
 			textEl.current === null ||
 			textEl.current.textContent === null ||
-			textEl.current.textContent === ""
+			textEl.current.textContent.trim() === ""
 		)
 			return;
 
