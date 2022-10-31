@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ICard } from "../types";
+import { useEffect, useRef, useState } from "react";
 import EditIcon from "../icons/edit.svg";
 import DeleteIcon from "../icons/delete.svg";
 import OpenIcon from "../icons/open.svg";
+import { ICard } from "../types";
 import { setOverlay, selectOverlay } from "../slices/overlaySlice";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
@@ -14,12 +14,17 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 function Card(props: ICard) {
+	const dispatch = useAppDispatch();
 	const overlayIsActive = useAppSelector(selectOverlay);
+
 	const [popUpIsActive, setpopUpIsActive] = useState(false);
+	const [showLabelText, setshowLabelText] = useState(false);
 
 	const textEl = useRef<HTMLParagraphElement>(null);
 
-	const dispatch = useAppDispatch();
+	function toggleLabelText() {
+		setshowLabelText((current) => !current);
+	}
 
 	function enablePopUp() {
 		setpopUpIsActive(true);
@@ -91,7 +96,15 @@ function Card(props: ICard) {
 					</div>
 				)}
 				<div className="p-1 flex flex-wrap">
-					<Label />
+					{props.labels.map((label) => (
+						<Label
+							onClick={() => {
+								toggleLabelText();
+							}}
+							{...label}
+							showLabelText={showLabelText}
+						/>
+					))}
 				</div>
 				<p
 					ref={textEl}

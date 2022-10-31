@@ -84,11 +84,34 @@ export const listsSlice = createSlice({
 
 			if (foundList) {
 				const foundCard = foundList.cards.find(
-					(card) => card.id === action.payload.id
+					(card) => card.id === action.payload.cardId
 				);
 
 				if (foundCard) {
-					foundCard.labels.filter((label) => label.id !== action.payload.id);
+					foundCard.labels = foundCard.labels.filter(
+						(label) => label.id !== action.payload.id
+					);
+				}
+			}
+		},
+		editLabel(state, action: PayloadAction<ILabel>) {
+			const foundList = state.store.find(
+				(list) => list.id === action.payload.listId
+			);
+
+			if (foundList) {
+				const foundCard = foundList.cards.find(
+					(card) => card.id === action.payload.cardId
+				);
+
+				if (foundCard) {
+					const foundLabel = foundCard.labels.find(
+						(label) => label.id === action.payload.id
+					);
+					if (foundLabel) {
+						foundLabel.text = action.payload.text;
+						foundLabel.color = action.payload.color;
+					}
 				}
 			}
 		},
@@ -105,6 +128,7 @@ export const {
 	updateCardText,
 	addLabel,
 	removeLabel,
+	editLabel,
 } = listsSlice.actions;
 
 export const selectLists = (state: RootState) => state.lists.store;
