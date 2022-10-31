@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-import { IList, ICard } from "../types";
+import { IList, ICard, ILabel } from "../types";
 
 // create a slice
 export const listsSlice = createSlice({
@@ -62,6 +62,36 @@ export const listsSlice = createSlice({
 				}
 			}
 		},
+		addLabel(state, action: PayloadAction<ILabel>) {
+			const foundList = state.store.find(
+				(list) => list.id === action.payload.listId
+			);
+
+			if (foundList) {
+				const foundCard = foundList.cards.find(
+					(card) => card.id === action.payload.cardId
+				);
+
+				if (foundCard) {
+					foundCard.labels.push(action.payload);
+				}
+			}
+		},
+		removeLabel(state, action: PayloadAction<ILabel>) {
+			const foundList = state.store.find(
+				(list) => list.id === action.payload.listId
+			);
+
+			if (foundList) {
+				const foundCard = foundList.cards.find(
+					(card) => card.id === action.payload.id
+				);
+
+				if (foundCard) {
+					foundCard.labels.filter((label) => label.id !== action.payload.id);
+				}
+			}
+		},
 	},
 });
 
@@ -73,6 +103,8 @@ export const {
 	addCard,
 	removeCard,
 	updateCardText,
+	addLabel,
+	removeLabel,
 } = listsSlice.actions;
 
 export const selectLists = (state: RootState) => state.lists.store;

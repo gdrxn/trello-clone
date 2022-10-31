@@ -12,14 +12,14 @@ export const cardSlice = createSlice({
 		setCard(state, action: PayloadAction<ICard>) {
 			state.details = action.payload;
 		},
-		removeCard(state) {
+		unsetCard(state) {
 			state.details = null;
 		},
 	},
 });
 
 // export the action
-export const { setCard, removeCard } = cardSlice.actions;
+export const { setCard, unsetCard } = cardSlice.actions;
 
 export const selectCard = (state: RootState) => state.card.details;
 

@@ -10,6 +10,7 @@ import { IList } from "../types";
 import type { RootState, AppDispatch } from "../store";
 import { v4 as uuidv4 } from "uuid";
 import { selectOverlay, setOverlay } from "../slices/overlaySlice";
+import CardPopup from "../components/CardEditPopup";
 import { selectCard } from "../slices/cardSlice";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -53,14 +54,7 @@ const Home: NextPage = () => {
 				></div>
 			)}
 
-			{card && (
-				<div className="absolute flex flex-col items-center  bg-white w-[65rem] h-[45rem] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-40">
-					<h1 className="mt-3 text-2xl">Edit card</h1>
-					<textarea className="mt-5 w-11/12 h-1/2 rounded-sm border border-gray-200 resize-none">
-						{card.text}
-					</textarea>
-				</div>
-			)}
+			{card && <CardPopup />}
 
 			<main className="flex h-full items-start pt-10 pl-7 pb-5 space-x-2.5 pr-7">
 				{lists.map((list) => (

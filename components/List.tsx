@@ -38,8 +38,6 @@ function List(props: IList) {
 	}
 
 	function editListName(newName: string) {
-		if (newName.trim()) return;
-
 		setListName(newName);
 		dispatch(changeListName({ id: props.id, newName: newName }));
 	}
