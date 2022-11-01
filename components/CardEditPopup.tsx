@@ -23,6 +23,18 @@ function CardPopup() {
 	const [labelNewPopupIsActive, setlabelNewPopupIsActive] = useState(false);
 
 	useEffect(() => {
+		if (selectedLabel) {
+			setlabelNewPopupIsActive(false);
+		}
+	}, [selectedLabel]);
+
+	useEffect(() => {
+		if (labelNewPopupIsActive) {
+			setselectedLabel(null);
+		}
+	}, [labelNewPopupIsActive]);
+
+	useEffect(() => {
 		const foundList = lists.find((list) => list.id === selectedCard?.listId);
 
 		if (foundList) {
