@@ -79,7 +79,7 @@ function Card(props: ICard) {
 							onClick={() => {
 								dispatch(setCard(props));
 							}}
-							className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap"
+							className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap hover:translate-x-2 transition"
 						>
 							<OpenIcon className="w-4 h-4" />
 							<span>Open card</span>
@@ -88,7 +88,7 @@ function Card(props: ICard) {
 							onClick={() => {
 								deleteCard();
 							}}
-							className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap"
+							className="flex items-center space-x-2 py-1 px-2 text-gray-100 bg-gray-800 rounded whitespace-nowrap hover:translate-x-2 transition"
 						>
 							<DeleteIcon className="w-4 h-4" />
 							<span>Delete card</span>
