@@ -1,10 +1,11 @@
+import { useRef, useState, Dispatch, SetStateAction } from "react";
 import { v4 as uuidv4 } from "uuid";
-import React, { useRef, useState } from "react";
+
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
-import { addLabel } from "../slices/listsSlices";
 import type { RootState, AppDispatch } from "../store";
+import { addLabel } from "../slices/listsSlices";
+
 import { ICard, ILabel, labelColor, labelColors } from "../types";
-import { Dispatch, SetStateAction } from "react";
 import CloseIcon from "../icons/close.svg";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -14,7 +15,9 @@ function LabelNewPopup(
 	props: ICard & { setlabelNewPopupIsActive: Dispatch<SetStateAction<boolean>> }
 ) {
 	const dispatch = useAppDispatch();
+
 	const [selectedColor, setselectedColor] = useState<labelColor>("blue");
+
 	const labelNameRef = useRef<HTMLInputElement>(null);
 
 	function saveLabel() {

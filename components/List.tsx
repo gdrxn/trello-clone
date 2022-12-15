@@ -1,22 +1,27 @@
-import { useState, useRef, RefObject } from "react";
-import CloseIcon from "../icons/close.svg";
-import OptionIcon from "../icons/options.svg";
-import PlusIcon from "../icons/plus.svg";
-import Card from "./Card";
-import { IList } from "../types";
+import { useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store";
 import { addCard, removeList, changeListName } from "../slices/listsSlices";
+
+import Card from "./Card";
+import { IList } from "../types";
+
+import CloseIcon from "../icons/close.svg";
+import OptionIcon from "../icons/options.svg";
+import PlusIcon from "../icons/plus.svg";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
 function List(props: IList) {
 	const dispatch = useAppDispatch();
+
 	const [isEditingCardName, setIsEditingCardName] = useState(false);
-	const cardRef = useRef<HTMLTextAreaElement>(null);
 	const [listName, setListName] = useState(props.name);
 	const [listPopUpIsActive, setListPopUpIsActive] = useState(false);
+
+	const cardRef = useRef<HTMLTextAreaElement>(null);
 
 	function saveCard() {
 		if (!cardRef.current || cardRef.current.value.trim() === "") return;

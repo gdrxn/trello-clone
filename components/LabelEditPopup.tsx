@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState, Dispatch, SetStateAction } from "react";
+
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
-import { editLabel, removeLabel } from "../slices/listsSlices";
 import type { RootState, AppDispatch } from "../store";
+import { editLabel, removeLabel } from "../slices/listsSlices";
+
 import { ILabel, labelColor, labelColors } from "../types";
-import { Dispatch, SetStateAction } from "react";
+
 import CloseIcon from "../icons/close.svg";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -15,7 +17,9 @@ function LabelNewPopup(
 	}
 ) {
 	const dispatch = useAppDispatch();
+
 	const [selectedColor, setselectedColor] = useState<labelColor>(props.color);
+
 	const labelNameRef = useRef<HTMLInputElement>(null);
 	const newText = useRef(props.text);
 

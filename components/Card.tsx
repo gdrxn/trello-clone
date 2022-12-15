@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from "react";
+
+import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
+import type { RootState, AppDispatch } from "../store";
+import { setOverlay, selectOverlay } from "../slices/overlaySlice";
+import { removeCard, updateCardText } from "../slices/listsSlices";
+import { setCard } from "../slices/cardSlice";
+
+import { ICard } from "../types";
+
+import Label from "./Label";
+
 import EditIcon from "../icons/edit.svg";
 import DeleteIcon from "../icons/delete.svg";
 import OpenIcon from "../icons/open.svg";
-import { ICard } from "../types";
-import { setOverlay, selectOverlay } from "../slices/overlaySlice";
-import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
-import type { RootState, AppDispatch } from "../store";
-import { removeCard, updateCardText } from "../slices/listsSlices";
-import Label from "./Label";
-import { setCard } from "../slices/cardSlice";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

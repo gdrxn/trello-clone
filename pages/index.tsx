@@ -1,17 +1,21 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+
 import { useState, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
+
+import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
+import type { RootState, AppDispatch } from "../store";
+import { selectOverlay, setOverlay } from "../slices/overlaySlice";
+import { selectCard } from "../slices/cardSlice";
+import { selectLists, addList } from "../slices/listsSlices";
+
 import List from "../components/List";
+import CardPopup from "../components/CardEditPopup";
+
+import { IList } from "../types";
 import CloseIcon from "../icons/close.svg";
 import PlusIcon from "../icons/plus.svg";
-import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
-import { selectLists, addList } from "../slices/listsSlices";
-import { IList } from "../types";
-import type { RootState, AppDispatch } from "../store";
-import { v4 as uuidv4 } from "uuid";
-import { selectOverlay, setOverlay } from "../slices/overlaySlice";
-import CardPopup from "../components/CardEditPopup";
-import { selectCard } from "../slices/cardSlice";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -38,6 +42,7 @@ const Home: NextPage = () => {
 
 		listNameRef.current.value = "";
 	}
+
 	return (
 		<div className="min-h-screen min-w-fit bg-gradient-to-r from-cyan-500 to-purple-500 relative">
 			<Head>
@@ -58,12 +63,7 @@ const Home: NextPage = () => {
 
 			<main className="flex h-full items-start pt-10 pl-7 pb-5 space-x-2.5 pr-7">
 				{lists.map((list) => (
-					<List
-						name={list.name}
-						id={list.id}
-						cards={list.cards}
-						key={list.id}
-					/>
+					<List {...list} />
 				))}
 
 				{!isEditingListName ? (

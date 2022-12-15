@@ -1,14 +1,19 @@
-import CloseIcon from "../icons/close.svg";
+import { useEffect, useState, useRef } from "react";
+
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { unsetCard, selectCard } from "../slices/cardSlice";
-import PlusIcon from "../icons/plus.svg";
-import { ILabel } from "../types";
+import { selectLists, updateCardText } from "../slices/listsSlices";
+import { setOverlay } from "../slices/overlaySlice";
+
 import LabelNewPopup from "./LabelNewPopup";
-import { useEffect, useState } from "react";
-import { selectLists } from "../slices/listsSlices";
-import { labelColors } from "../types";
 import LabelEditPopup from "./LabelEditPopup";
+
+import { ILabel } from "../types";
+import { labelColors, ICard } from "../types";
+
+import CloseIcon from "../icons/close.svg";
+import PlusIcon from "../icons/plus.svg";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -16,11 +21,34 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 function CardPopup() {
 	const dispatch = useAppDispatch();
 	const selectedCard = useAppSelector(selectCard);
-
 	const lists = useAppSelector(selectLists);
+
 	const [labels, setLabels] = useState<ILabel[]>([]);
 	const [selectedLabel, setselectedLabel] = useState<null | ILabel>(null);
 	const [labelNewPopupIsActive, setlabelNewPopupIsActive] = useState(false);
+
+	const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+	function save() {
+		if (
+			selectedCard === null ||
+			descriptionRef.current === null ||
+			descriptionRef.current.value === null ||
+			descriptionRef.current.value.trim() === ""
+		)
+			return;
+
+		const updatedCard: ICard = {
+			id: selectedCard.id,
+			listId: selectedCard.listId,
+			text: descriptionRef.current.value,
+			labels: selectedCard.labels,
+		};
+
+		dispatch(updateCardText(updatedCard));
+		dispatch(unsetCard());
+		dispatch(setOverlay(false));
+	}
 
 	useEffect(() => {
 		if (selectedLabel) {
@@ -109,14 +137,20 @@ function CardPopup() {
 
 				<div className="mt-12 flex flex-col space-y-2">
 					<h2 className="text-base font-medium">Description</h2>
-					<textarea className="h-64 p-2 rounded-sm border border-gray-200 resize-none focus:outline-none">
+					<textarea
+						ref={descriptionRef}
+						className="h-64 p-2 rounded-sm border border-gray-200 resize-none focus:outline-none"
+					>
 						{selectedCard?.text}
 					</textarea>
 				</div>
 
 				<div className="absolute left-1/2 transform -translate-x-1/2 top-4  bg-emerald-300 w-1/2 h-3/12"></div>
 
-				<button className="text-lg text-zinc-100 p-6 py-1 bg-blue-500 hover:bg-blue-600 rounded-3xl self-end mt-6 mr-3">
+				<button
+					onClick={save}
+					className="text-lg text-zinc-100 p-6 py-1 bg-blue-500 hover:bg-blue-600 rounded-3xl self-end mt-6 mr-3"
+				>
 					Save
 				</button>
 			</div>
