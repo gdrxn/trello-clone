@@ -49,7 +49,7 @@ function List(props: IList) {
 		dispatch(changeListName({ id: props.id, newName: newName }));
 	}
 
-	const listPopUpRef = useRef<HTMLDivElement>(null);
+	const listPopUpRef = useRef<HTMLButtonElement>(null);
 	const [listening, setListening] = useState(false);
 
 	useEffect(
@@ -57,10 +57,7 @@ function List(props: IList) {
 	);
 
 	return (
-		<article
-			ref={listPopUpRef}
-			className="flex flex-shrink-0 flex-col px-2 w-72 bg-slate-100 rounded bg-opacity-95 max-h-full relative"
-		>
+		<article className="flex flex-shrink-0 flex-col px-2 w-72 bg-slate-100 rounded bg-opacity-95 max-h-full relative">
 			{listPopUpIsActive && (
 				<div className="flex flex-col bg-white left-64 w-64 top-10 absolute z-20 rounded bg-opacity-95">
 					<div className="flex items-center justify-center  mx-3 py-2 border-gray-200 border-b">
@@ -92,6 +89,7 @@ function List(props: IList) {
 				/>
 
 				<button
+					ref={listPopUpRef}
 					className="p-1 hover:bg-gray-300 rounded-sm"
 					onClick={() => {
 						setListPopUpIsActive(true);

@@ -102,6 +102,7 @@ function Card(props: ICard) {
 				<div className="p-1 flex flex-wrap">
 					{props.labels.map((label) => (
 						<Label
+							key={label.id}
 							onClick={() => {
 								toggleLabelText();
 							}}
